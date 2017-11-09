@@ -1,4 +1,4 @@
-package lab2;
+package Matrix.src;
 
 import java.util.Random;
 
@@ -149,8 +149,37 @@ public class Matrix {
         return tab;
     }
 
+    Matrix getColumn(int i){
+        this.asArray();
+        Matrix n = new Matrix(new double[rows][1]);
+        int k=0;
+        for (int j=0; j<rows*cols; j++){
+                if (j%i==0){
+                    n.data[k] = data[j];
+                    k++;
+                }
+        }
 
-    Matrix dot(Matrix m) {
+        return n;
+    }
+
+    Matrix getColumn(int col){
+        if (col>this.cols || col<0) throw new RuntimeException("Hola, niepoprawna kolumna...");
+
+        Matrix result = new Matrix(this.rows,1);
+
+        for(int i=0;i<this.rows;i++){
+            result.set(i, 0, this.get(i,col));
+        }
+
+        return result;
+
+
+    }
+
+
+
+  /*  Matrix dot(Matrix m) {
         Matrix n = new Matrix(this.rows, m.cols);
         double buf = 0;
         int j = 0;
@@ -163,7 +192,7 @@ public class Matrix {
             buf = 0;
         }
         return n;
-    }
+    }*/
 
     double forbenius() {
         double buf = 0;
