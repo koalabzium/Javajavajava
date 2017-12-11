@@ -1,3 +1,8 @@
+package CV.src;
+
+import CV.src.Photo;
+import CV.src.Section;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;

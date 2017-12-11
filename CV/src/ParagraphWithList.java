@@ -1,3 +1,7 @@
+package CV.src;
+
+import CV.src.Paragraph;
+
 import java.io.PrintStream;
 
 public class ParagraphWithList extends Paragraph {
