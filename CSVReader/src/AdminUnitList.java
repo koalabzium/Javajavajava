@@ -22,8 +22,8 @@ public class AdminUnitList {
             unit.setPopulation(reader.getDouble("population"));
             if (!reader.isMissing("area"))
             unit.setArea(reader.getDouble("area"));
-            if (!reader.isMissing("dencity"))
-            unit.setDensity(reader.getDouble("dencity"));
+            if (!reader.isMissing("density"))
+            unit.setDensity(reader.getDouble("density"));
             //unit.setParent(reader.get(""));
 
             this.units.add(unit);
@@ -33,9 +33,9 @@ public class AdminUnitList {
     void list(PrintStream out){
         this.units.forEach(unit->out.println(unit.toString()));
 
-//        for(AdminUnit unit: units){
-//            out.println(unit.toString());
-//        }
+        for(AdminUnit unit: units){
+            out.println(unit.toString());
+        }
 
     }
 

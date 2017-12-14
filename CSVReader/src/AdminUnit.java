@@ -12,7 +12,7 @@ public class AdminUnit {
 
 
     public String toString(){
-        return String.format("Name: %s, populatio: %f, area: %f.", this.name, this.population, this.area);
+        return String.format("Name: %s, population: %f, area: %f.", this.name, this.population, this.area);
     }
 
     public void setName(String name) {
