@@ -2,11 +2,11 @@ package CSVReader.src;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AdminUnitList {
     List<AdminUnit> units = new ArrayList<>();
+    Map<Long,List<AdminUnit>> parentid2child = new HashMap<>();
 
 
     public void read(String filename) throws IOException {
@@ -20,15 +20,31 @@ public class AdminUnitList {
             unit.setName(reader.get("name"));
             if (!reader.isMissing("population"))
             unit.setPopulation(reader.getDouble("population"));
+            else unit.setPopulation(-1);
             if (!reader.isMissing("area"))
             unit.setArea(reader.getDouble("area"));
             if (!reader.isMissing("density"))
             unit.setDensity(reader.getDouble("density"));
+            else unit.setDensity(-1);
+            if (!reader.isMissing("x1") && !reader.isMissing("x3") && !reader.isMissing("y1") && !reader.isMissing("y3"))
+                unit.setBbox(new BoundingBox(reader.getDouble("x1"),reader.getDouble("x3"),reader.getDouble("y1"),reader.getDouble("y3")));
             //unit.setParent(reader.get(""));
 
+            List<AdminUnit> children = new ArrayList<>();
+
+            for(AdminUnit nana : units){
+                if(nana.getParent() == unit){
+                    unit.children.add(nana);
+                }
+            }
+            this.parentid2child.put(unit.id,unit.children);
+            unit.fixMissingValues();
             this.units.add(unit);
+
         }
     }
+
+
 
     void list(PrintStream out){
         this.units.forEach(unit->out.println(unit.toString()));
@@ -64,6 +80,57 @@ public class AdminUnitList {
     }
 
 
+    /**
+     * Zwraca listę jednostek sąsiadujących z jendostką unit na tym samym poziomie hierarchii admin_level.
+     * Czyli sąsiadami wojweództw są województwa, powiatów - powiaty, gmin - gminy, miejscowości - inne miejscowości
+     * @param unit - jednostka, której sąsiedzi mają być wyznaczeni
+     * @param maxdistance - parametr stosowany wyłącznie dla miejscowości, maksymalny promień odległości od środka unit,
+     *                    w którym mają sie znaleźć punkty środkowe BoundingBox sąsiadów
+     * @return lista wypełniona sąsiadami
+     */
+   /* AdminUnitList getNeighbors(AdminUnit unit, double maxdistance){
 
+        AdminUnitList n = new AdminUnitList();
+        for(AdminUnit u: units){
+            if (unit.adminLevel )
+        }
+    }*/
+
+
+   AdminUnitList sortInplaceByName(){
+       AdminUnitList tmp = new AdminUnitList();
+       class CustomComperator implements Comparator<AdminUnit>{
+           @Override
+           public int compare(AdminUnit a1, AdminUnit a2){
+               return a1.getName().compareTo(a2.getName());
+           }
+       }
+
+       units.sort(new CustomComperator());
+
+       this.units = tmp.units;
+       return this;
+
+   }
+
+    AdminUnitList sortInplaceByArea(){
+        AdminUnitList tmp = new AdminUnitList();
+        class CustomComperator implements Comparator<AdminUnit>{
+            @Override
+            public int compare(AdminUnit a1, AdminUnit a2){
+                return Double.compare(a1.getArea(),a2.getArea());
+            }
+        }
+
+        units.sort(new CustomComperator());
+
+        this.units = tmp.units;
+        return this;
+    }
+
+//    AdminUnitList sortInplaceByPopulation(){
+//
+//
+//    }
 
 }

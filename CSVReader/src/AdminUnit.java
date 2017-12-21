@@ -1,5 +1,8 @@
 package CSVReader.src;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AdminUnit {
 
     String name;
@@ -7,12 +10,14 @@ public class AdminUnit {
     double population;
     double area;
     double density;
+    Long id;
     AdminUnit parent;
-    BoundingBox bbox = new BoundingBox();
+    List<AdminUnit> children = new ArrayList<>();
+    BoundingBox bbox = new BoundingBox(0,0,0,0);
 
 
     public String toString(){
-        return String.format("Name: %s, population: %f, area: %f.", this.name, this.population, this.area);
+        return String.format("Name: %s, population: %f, area: %f.", this.name, this.population, this.area) + bbox.toString();
     }
 
     public void setName(String name) {
@@ -74,6 +79,26 @@ public class AdminUnit {
     }
 
 
+
+
+    double fixMissingValues(){
+
+        if(this.density != -1){
+            return this.density;
+
+        }
+        else
+        {
+            this.density = this.parent.fixMissingValues();
+            this.population = this.area * this.density;
+            return this.density;
+
+        }
+
+
+
+
+    }
 
 
 
