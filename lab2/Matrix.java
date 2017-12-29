@@ -151,20 +151,20 @@ public class Matrix {
 
 
 
-    Matrix dot(Matrix m){
-        Matrix n = new Matrix(this.rows, m.cols);
-        double buf = 0;
-        int j =0;
-        for (int i = 0; i < (n.rows*n.cols) ; i++){
-            for(int k = 0,;k<m.rows;k+=m.cols){
-                buf+= data[j] * data[k];
-                j++;
-            }
-            n.data[i] = buf;
-            buf = 0;
-        }
-        return n;
-    }
+//    Matrix dot(Matrix m){
+//        Matrix n = new Matrix(this.rows, m.cols);
+//        double buf = 0;
+//        int j =0;
+//        for (int i = 0; i < (n.rows*n.cols) ; i++){
+//            for(int k = 0,;k<m.rows;k+=m.cols){
+//                buf+= data[j] * data[k];
+//                j++;
+//            }
+//            n.data[i] = buf;
+//            buf = 0;
+//        }
+//        return n;
+//    }
 
     double forbenius(){
         double buf = 0;

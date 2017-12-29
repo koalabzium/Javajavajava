@@ -149,7 +149,7 @@ public class Matrix {
         return tab;
     }
 
-    Matrix getColumn(int i){
+    /*Matrix getColumn(int i){
         this.asArray();
         Matrix n = new Matrix(new double[rows][1]);
         int k=0;
@@ -177,7 +177,7 @@ public class Matrix {
 
     }
 
-
+*/
 
   /*  Matrix dot(Matrix m) {
         Matrix n = new Matrix(this.rows, m.cols);
