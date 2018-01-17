@@ -3,11 +3,22 @@ package CSVReader.src;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.lang.Double.compare;
 
 public class AdminUnitList {
     List<AdminUnit> units = new ArrayList<>();
     Map<Long,List<AdminUnit>> parentid2child = new HashMap<>();
 
+
+    public AdminUnitList(Stream<AdminUnit> adminUnitStream) {
+        units = adminUnitStream.collect(Collectors.toList());
+    }
+
+    public AdminUnitList() { }
 
     public void read(String filename) throws IOException {
         CSVReader reader = new CSVReader(filename,",",true);
@@ -80,61 +91,80 @@ public class AdminUnitList {
     }
 
 
-   /* AdminUnitList getNeighbors(AdminUnit unit, double maxdistance){
+    AdminUnitList getNeighbors(AdminUnit unit, double maxdistance){
 
         AdminUnitList n = new AdminUnitList();
         for(AdminUnit u: units){
-            if (unit.adminLevel )
+            if (unit.adminLevel == u.adminLevel){
+                if(unit.adminLevel==8){
+                    if(unit.getBbox().distanceTo(u.getBbox())<maxdistance) n.units.add(u);
+                }
+                else{
+                    if(unit.getBbox().intersects(u.getBbox())) n.units.add(u);
+                }
+            }
         }
-    }*/
+        return n;
+    }
 
-
+    class MojPierwszyKomperator implements Comparator<AdminUnit>{
+        @Override
+        public int compare(AdminUnit a1, AdminUnit a2){
+            return a1.getName().compareTo(a2.getName());
+        }
+    }
    AdminUnitList sortInplaceByName(){
        AdminUnitList tmp = new AdminUnitList();
-       class CustomComperator implements Comparator<AdminUnit>{
-           @Override
-           public int compare(AdminUnit a1, AdminUnit a2){
-               return a1.getName().compareTo(a2.getName());
-           }
-       }
-
-       units.sort(new CustomComperator());
-
+       units.sort(new MojPierwszyKomperator());
        this.units = tmp.units;
        return this;
 
    }
 
     AdminUnitList sortInplaceByArea(){
-        AdminUnitList tmp = new AdminUnitList();
-        class CustomComperator implements Comparator<AdminUnit>{
+
+        class MojDrugiKomperator implements Comparator<AdminUnit>{
             @Override
             public int compare(AdminUnit a1, AdminUnit a2){
                 return Double.compare(a1.getArea(),a2.getArea());
             }
         }
 
-        units.sort(new CustomComperator());
+        units.sort(new MojDrugiKomperator());
 
-        this.units = tmp.units;
         return this;
     }
 
     AdminUnitList sortInplaceByPopulation(){
-        AdminUnitList tmp = new AdminUnitList();
-        class CustomComperator implements Comparator<AdminUnit>{
-            @Override
-            public int compare(AdminUnit a1, AdminUnit a2){
-                return Double.compare(a1.getPopulation(),a2.getPopulation());
-            }
-        }
-
-        units.sort(new CustomComperator());
-
-        this.units = tmp.units;
+        this.units.sort((p1,p2)->Double.compare(p1.getPopulation(),p2.getPopulation()));
         return this;
     }
 
+
+    AdminUnitList sortInplace(Comparator<AdminUnit> cmp){
+        this.units.sort(cmp);
+        return this;
+    }
+
+    AdminUnitList sort(Comparator<AdminUnit> cmp){
+        AdminUnitList outowaList = new AdminUnitList();
+        outowaList.units=this.units;
+        outowaList.sortInplace(cmp);
+        return outowaList;
+    }
+
+
+    AdminUnitList mójPierwszyFilter(Predicate<AdminUnit> pred){
+        return new AdminUnitList(units.stream().filter(pred));
+    }
+
+    AdminUnitList filter(Predicate<AdminUnit> pred, int limit) {
+        return new AdminUnitList(units.stream().filter(pred).limit(limit));
+    }
+
+    AdminUnitList filter(Predicate<AdminUnit> pred, int offset, int limit) {
+        return new AdminUnitList(units.stream().filter(pred).skip(offset).limit(limit));
+    }
 
 
 }
