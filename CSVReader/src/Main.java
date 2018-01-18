@@ -23,6 +23,9 @@ public class Main {
             System.out.println("Błąd, błąd, błąd");
         }
 
+
+
+
         try {
             CSVReader reader = new CSVReader("no-header.csv", ";", false);
 
