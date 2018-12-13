@@ -24,8 +24,8 @@ public class BouncingBallsPanel extends JPanel {
             this.x = r.nextInt(700);
             this.y = r.nextInt(700);
             this.color = new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255));
-            this.vx = (r.nextInt(2) == 1) ? -10 : 10;
-            this.vy = (r.nextInt(2) == 1) ? -10 : 10;
+            this.vx = (r.nextInt(5))+5;
+            this.vy = (r.nextInt(5))+5;
             this.size = r.nextInt(15)+15;
         }
 
